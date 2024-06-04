@@ -1,0 +1,42 @@
+### sign up
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+ "username":"bedessa",
+ "email":"bedessa@gmail.com",
+ "password":"12345"
+}
+
+###sign in
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"megersa@gmail.com",
+ "password":"12345"
+}
+
+###signout
+POST http://localhost:3000/auth/signout
+
+### who am i?
+GET  http://localhost:3000/users/whoami
+
+### get all users
+GET http://localhost:3000/users?email=hluf@gmail.com
+
+### get single user
+GET http://localhost:3000/users/6
+
+### remove user
+DELETE  http://localhost:3000/users/7
+
+### update user
+PATCH  http://localhost:3000/users/4
+Content-Type: application/json
+
+{
+    "email":"bedasa@gamil.com",
+    "username":"bedasa"
+}
