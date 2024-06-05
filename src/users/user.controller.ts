@@ -18,6 +18,7 @@ import { UserDto } from './dto/user.dto';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { RestPasswordDto } from './dto/reset-password.dto';
 
 @Controller()
 @Serialize(UserDto)
@@ -26,7 +27,7 @@ export class UserController {
     private userService: UserService,
     private authService: AuthService,
   ) {}
-
+  // Auth related operations
   @UseGuards(AuthGuard)
   @Get('users/whoami')
   whoAmi(@CurrentUser() user: any): User {
@@ -57,14 +58,28 @@ export class UserController {
   signout(@Session() session: any) {
     session.userId = null;
   }
+  @Post('auth/forget-password')
+  forgetPassword(@Body() body: Partial<User>) {
+    this.authService.forgetPassword(body.email);
+    return 'Reset link sent!';
+  }
 
+  @Post('auth/reset-password/:token')
+  resetPassword(
+    @Param('token') token: string,
+    @Body() { password, confirmPassword }: RestPasswordDto,
+  ) {
+    return this.authService.resetPassword(token, password, confirmPassword);
+  }
+
+  // Operation on User
   @Get('users')
   getUserByEmail(@Query() { email }: { email: string }) {
     return this.userService.find(email);
   }
 
   @Get('users/:id')
-  getUser(@Param('id') id: string) {
+  getUserById(@Param('id') id: string) {
     return this.userService.findOne(parseInt(id));
   }
 
