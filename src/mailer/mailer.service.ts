@@ -20,13 +20,13 @@ export class MailerService {
     from: string,
     to: string,
     subject: string,
-    text: string,
+    html: string,
   ) {
     const mailingOptions: MailOptions = {
       from,
       to,
       subject,
-      text,
+      html,
     };
     this.transport.sendMail(mailingOptions);
   }

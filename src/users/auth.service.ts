@@ -53,10 +53,12 @@ export class AuthService {
       'hluf@mailtrap.com',
       user.email,
       'Password Reset',
-      `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
-        `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
-        `http://localhost:3000/auth/reset-password/${token}\n\n` +
-        `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+      `
+        <p>You are receiving this because you (or someone else) have requested the reset of the password for your account.</p>
+        <p>Please click on the following link, or paste this into your browser to complete the process:</p>
+        <a href="http://localhost:3000/auth/reset-password/${token}">Reset Password</a>
+        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+      `,
     );
   }
   async resetPassword(
@@ -73,7 +75,7 @@ export class AuthService {
       const hash = salt + '.' + hashedPassword.toString('hex');
       return this.userService.update(id, { password: hash });
     } catch (error) {
-      throw new BadRequestException(error.response);
+      throw new BadRequestException(error);
     }
   }
 }
