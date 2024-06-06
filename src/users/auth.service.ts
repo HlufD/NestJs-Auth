@@ -45,22 +45,30 @@ export class AuthService {
     return user;
   }
   async forgetPassword(email: string) {
-    const user = await this.userService.find(email);
-    if (!user) throw new NotFoundException('email not registered!');
-    const payload = { email, id: user.id };
-    const token = await this.jwtService.signAsync(payload);
-    this.mailerService.sendEmailWithTemplate(
-      'hluf@mailtrap.com',
-      user.email,
-      'Password Reset',
-      `
+    try {
+      const user = await this.userService.find(email);
+      if (!user) {
+        throw new NotFoundException('email not registered!');
+      }
+      const payload = { email, id: user.id };
+      const token = await this.jwtService.signAsync(payload);
+      this.mailerService.sendEmailWithTemplate(
+        'someone@maailtrap.com',
+        user.email,
+        'Password Reset',
+        `
         <p>You are receiving this because you (or someone else) have requested the reset of the password for your account.</p>
         <p>Please click on the following link, or paste this into your browser to complete the process:</p>
-        <a href="http://localhost:3000/auth/reset-password/${token}">Reset Password</a>
+        <a href="http://localhost:5173/reset-password/${token}">Reset Password</a>
         <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
       `,
-    );
+      );
+      return 'Reset link sent';
+    } catch (error) {
+      throw new NotFoundException(error.response);
+    }
   }
+
   async resetPassword(
     token: string,
     password: string,

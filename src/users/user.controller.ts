@@ -59,9 +59,9 @@ export class UserController {
     session.userId = null;
   }
   @Post('auth/forget-password')
-  forgetPassword(@Body() body: Partial<User>) {
-    this.authService.forgetPassword(body.email);
-    return 'Reset link sent!';
+  async forgetPassword(@Body() body: Partial<User>) {
+    const res = await this.authService.forgetPassword(body.email);
+    return res;
   }
 
   @Post('auth/reset-password/:token')
